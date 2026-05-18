@@ -24,7 +24,6 @@ Rectangle {
 	Rectangle {
 		anchors.fill: parent
 		color: root.config.colors.overlay
-		opacity: root.config.colors.overlayOpacity
 	}
 
 	focus: true
@@ -69,7 +68,7 @@ Rectangle {
 
 			renderType: Text.NativeRendering
 			font.pointSize: root.config.fonts.dateSize
-			color: root.config.rgba(root.config.colors.text, root.config.colors.textOpacityHigh)
+			color: root.config.colors.textHigh
 
 			Timer {
 				running: true
@@ -94,7 +93,7 @@ Rectangle {
 
 			renderType: Text.NativeRendering
 			font.pointSize: root.config.fonts.clockSize
-			color: root.config.rgba(root.config.colors.text, root.config.colors.textOpacityHigh)
+			color: root.config.colors.textHigh
 
 			Timer {
 				running: true
@@ -155,7 +154,7 @@ Rectangle {
 
 			Label {
 				text: root.context.pamMessage !== "" ? root.context.pamMessage : root.config.texts.fingerprintPrompt
-				color: root.config.rgba(root.config.colors.text, root.config.colors.textOpacityMid)
+				color: root.config.colors.textMid
 				font.pointSize: root.config.fonts.passwordSize
 				anchors.horizontalCenter: parent.horizontalCenter
 			}
@@ -187,13 +186,13 @@ Rectangle {
 
 				font.pointSize: root.config.fonts.passwordSize
 
-				color: enabled ? root.config.rgba(root.config.colors.text, root.config.colors.textOpacityHigh) : root.config.rgba(root.config.colors.text, root.config.colors.textOpacityLow)
+				color: enabled ? root.config.colors.textHigh : root.config.colors.textLow
 				selectionColor: root.config.colors.selection
 				selectedTextColor: bg
-				placeholderTextColor: enabled ? root.config.rgba(root.config.colors.text, root.config.colors.textOpacityMid) : root.config.rgba(root.config.colors.text, root.config.colors.textOpacityVeryLow)
+				placeholderTextColor: enabled ? root.config.colors.textMid : root.config.colors.textVeryLow
 
 				background: Rectangle {
-					color: enabled ? root.config.rgba(root.config.colors.accentBg, root.config.colors.accentBgOpacity) : root.config.rgba(root.config.colors.accentBg, root.config.colors.accentBgDisabledOpacity)
+					color: enabled ? root.config.colors.accentBg : root.config.colors.accentBgDisabled
 					radius: 6
 				}
 
@@ -261,7 +260,7 @@ Rectangle {
 						var ctx = getContext("2d");
 						ctx.reset();
 						ctx.lineWidth = 2;
-						ctx.strokeStyle = root.config.rgba(root.config.colors.spinner, root.config.colors.spinnerOpacity);
+						ctx.strokeStyle = root.config.colors.spinner;
 						ctx.lineCap = "round";
 						ctx.beginPath();
 						ctx.arc(width / 2, height / 2, width / 2 - 1, 0, Math.PI * 1.5);
@@ -283,7 +282,7 @@ Rectangle {
 
 				contentItem: Text {
 					text: root.config.texts.retryIcon
-					color: root.config.rgba(root.config.colors.text, root.config.colors.textOpacityMid)
+					color: root.config.colors.textMid
 					font.pointSize: root.config.fonts.retrySize
 					font.weight: Font.Bold
 					horizontalAlignment: Text.AlignHCenter
@@ -291,7 +290,7 @@ Rectangle {
 				}
 
 				background: Rectangle {
-					color: root.config.rgba(root.config.colors.accentBg, root.config.colors.accentBgOpacity)
+					color: root.config.colors.accentBg
 					radius: width / 2
 				}
 
@@ -300,7 +299,7 @@ Rectangle {
 
 			Text {
 				text: root.config.texts.retryLabel
-				color: root.config.rgba(root.config.colors.text, 0.35)
+				color: root.config.colors.textLabel
 				font.pointSize: 9
 				anchors.horizontalCenter: parent.horizontalCenter
 			}
@@ -317,7 +316,7 @@ Rectangle {
 					return root.config.texts.authFailed;
 				return "";
 			}
-			color: root.context.pamMessageIsError ? error : root.config.rgba(root.config.colors.text, 0.55)
+			color: root.context.pamMessageIsError ? error : root.config.colors.textStatus
 			font.pointSize: root.config.fonts.statusSize
 			Layout.alignment: Qt.AlignHCenter
 		}
@@ -333,7 +332,7 @@ Rectangle {
 			bottomMargin: 60
 		}
 		text: root.config.texts.hint
-		color: root.config.rgba(root.config.colors.text, 0.4)
+		color: root.config.colors.textHint
 		font.pointSize: root.config.fonts.hintSize
 
 		SequentialAnimation {
@@ -371,7 +370,7 @@ Rectangle {
 
 			contentItem: Text {
 				text: root.config.texts.cancelIcon
-				color: root.config.rgba(root.config.colors.text, root.config.colors.textOpacityMid)
+				color: root.config.colors.textMid
 				font.pointSize: root.config.fonts.cancelSize
 				font.weight: Font.Bold
 				horizontalAlignment: Text.AlignHCenter
@@ -379,7 +378,7 @@ Rectangle {
 			}
 
 			background: Rectangle {
-				color: root.config.rgba(root.config.colors.accentBg, root.config.colors.accentBgOpacity)
+				color: root.config.colors.accentBg
 				radius: width / 2
 			}
 
@@ -388,7 +387,7 @@ Rectangle {
 
 		Text {
 			text: root.config.texts.cancelLabel
-			color: root.config.rgba(root.config.colors.text, 0.35)
+			color: root.config.colors.textLabel
 			font.pointSize: 9
 			anchors.horizontalCenter: parent.horizontalCenter
 		}
