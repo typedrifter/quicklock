@@ -1,0 +1,55 @@
+{
+  "colors": {
+    "bg": "#000000",
+    "fg": "#ffffff",
+    "error": "#ff4444",
+    "overlay": "#000000",
+    "overlayOpacity": 0.3,
+    "text": "#ffffff",
+    "textOpacityHigh": 0.7,
+    "textOpacityMid": 0.5,
+    "textOpacityLow": 0.3,
+    "textOpacityVeryLow": 0.15,
+    "accentBg": "#ffffff",
+    "accentBgOpacity": 0.1,
+    "accentBgDisabledOpacity": 0.05,
+    "selection": "#666666",
+    "spinner": "#ffffff",
+    "spinnerOpacity": 0.6
+  },
+  "background": {
+    "image": "background.jpg",
+    "opacity": 0.6
+  },
+  "fonts": {
+    "dateSize": 24,
+    "clockSize": 80,
+    "fingerprintSize": 25,
+    "statusSize": 13,
+    "hintSize": 14,
+    "passwordSize": 12,
+    "retrySize": 16,
+    "cancelSize": 16
+  },
+  "texts": {
+    "fingerprintPrompt": "Place your finger on the sensor",
+    "passwordPlaceholder": "Enter password",
+    "retryLabel": "Retry",
+    "retryIcon": "↻",
+    "cancelLabel": "Cancel",
+    "cancelIcon": "✕",
+    "hint": "Click or press any key to unlock",
+    "authFailed": "Authentication failed"
+  },
+  "pam": {
+    "configDirectory": "pam",
+    "config": "password.conf",
+    "timeout": 30000
+  },
+  "animations": {
+    "enabled": true,
+    "clockMoveDuration": 500,
+    "pulseDuration": 2000,
+    "spinnerDuration": 800
+  }
+}
