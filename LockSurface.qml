@@ -176,6 +176,12 @@ Rectangle {
 
 				focus: true
 
+				onActiveFocusChanged: {
+					if (!activeFocus && visible) {
+						Qt.callLater(forceActiveFocus);
+					}
+				}
+
 				enabled: !root.context.unlockInProgress
 				echoMode: TextInput.Password
 				inputMethodHints: Qt.ImhSensitiveData
