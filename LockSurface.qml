@@ -17,14 +17,11 @@ Rectangle {
 	readonly property string fontFamily: "sans-serif"
 
 	// Type scale
-	readonly property int fontXs: 9
-	readonly property int fontSm: 12
-	readonly property int fontBase: 13
-	readonly property int fontMd: 14
-	readonly property int fontLg: 16
-	readonly property int fontXl: 24
-	readonly property int font2xl: 25
-	readonly property int font3xl: 80
+	readonly property int fontXs: 9    // small labels
+	readonly property int fontBase: 13 // body text
+	readonly property int fontLg: 16   // icon buttons
+	readonly property int fontXl: 24   // large text & icons
+	readonly property int font3xl: 80  // clock
 
 	// Spacing scale
 	readonly property int spaceXs: 6
@@ -65,10 +62,8 @@ Rectangle {
 	readonly property int marginHintBottom: 60
 	readonly property int marginCancelBottom: 40
 
-	// Animation durations (ms)
-	readonly property int animClockMove: 500
-	readonly property int animPulse: 2000
-	readonly property int animSpinner: 800
+	// Global animation duration (ms)
+	readonly property int animDuration: 600
 
 	// Timer intervals (ms)
 	readonly property int timerInterval: 1000
@@ -116,7 +111,7 @@ Rectangle {
 
 		Behavior on y {
 			NumberAnimation {
-				duration: animClockMove
+				duration: animDuration
 				easing.type: Easing.InOutQuad
 			}
 		}
@@ -192,7 +187,7 @@ Rectangle {
 				id: fingerprintIndicator
 				text: "󰈷"
 				color: fg
-				font.pointSize: font2xl
+font.pointSize: fontXl
 				font.family: fontFamily
 				anchors.horizontalCenter: parent.horizontalCenter
 
@@ -205,13 +200,13 @@ Rectangle {
 						target: fingerprintIndicator
 						property: "opacity"
 						to: 0.4
-						duration: animPulse
-					}
-					NumberAnimation {
-						target: fingerprintIndicator
-						property: "opacity"
-						to: 1.0
-						duration: animPulse
+								duration: animDuration * 2
+							}
+							NumberAnimation {
+								target: fingerprintIndicator
+								property: "opacity"
+								to: 1.0
+								duration: animDuration * 2
 					}
 				}
 			}
@@ -219,7 +214,7 @@ Rectangle {
 			Label {
 				text: root.context.pamMessage !== "" ? root.context.pamMessage : "Place your finger on the sensor"
 				color: textSecondary
-				font.pointSize: fontSm
+				font.pointSize: fontBase
 				font.family: fontFamily
 				anchors.horizontalCenter: parent.horizontalCenter
 			}
@@ -300,7 +295,7 @@ Rectangle {
 			// 	contentItem: Text {
 			// 		text: "›"
 			// 		color: parent.enabled ? textPrimary : textDisabled
-			// 		font.pointSize: font2xl
+// 				font.pointSize: fontXl
 			// 		font.family: fontFamily
 			// 		horizontalAlignment: Text.AlignHCenter
 			// 		verticalAlignment: Text.AlignVCenter
@@ -341,9 +336,9 @@ Rectangle {
 					NumberAnimation on angle {
 						from: 0
 						to: 360
-						duration: animSpinner
-						loops: Animation.Infinite
-					}
+									duration: animDuration * 2
+									loops: Animation.Infinite
+								}
 				}
 
 				Canvas {
@@ -430,7 +425,7 @@ Rectangle {
 		}
 		text: "Click or press any key to unlock"
 		color: textMuted
-		font.pointSize: fontMd
+		font.pointSize: fontBase
 		font.family: fontFamily
 
 		SequentialAnimation {
@@ -442,13 +437,13 @@ Rectangle {
 				target: hintLabel
 				property: "opacity"
 				to: 0.5
-				duration: animPulse
+				duration: animDuration * 2
 			}
 			NumberAnimation {
 				target: hintLabel
 				property: "opacity"
 				to: 1.0
-				duration: animPulse
+				duration: animDuration * 2
 			}
 		}
 	}
