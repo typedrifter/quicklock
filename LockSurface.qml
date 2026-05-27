@@ -7,6 +7,7 @@ Rectangle {
 	id: root
 	required property LockContext context
 
+	// Base palette
 	readonly property color bg: "#000000"
 	readonly property color fg: "#ffffff"
 	readonly property color surface: "#1a1a1a"
@@ -14,19 +15,86 @@ Rectangle {
 	readonly property color accent: "#4a4a4a"
 	readonly property color error: "#ff4444"
 
+	// Font
+	readonly property string fontFamily: "sans-serif"
+
+	// Font sizes
+	readonly property int fontDate: 24
+	readonly property int fontClock: 80
+	readonly property int fontFingerprintIcon: 25
+	readonly property int fontFingerprintMsg: 12
+	readonly property int fontRetryIcon: 16
+	readonly property int fontRetryLabel: 9
+	readonly property int fontStatus: 13
+	readonly property int fontHint: 14
+	readonly property int fontCancelIcon: 16
+	readonly property int fontCancelLabel: 9
+
+	// Text colors (white at varying opacities)
+	readonly property color textPrimary: Qt.rgba(1, 1, 1, 0.7)
+	readonly property color textSecondary: Qt.rgba(1, 1, 1, 0.5)
+	readonly property color textMuted: Qt.rgba(1, 1, 1, 0.4)
+	readonly property color textHint: Qt.rgba(1, 1, 1, 0.35)
+	readonly property color textDisabled: Qt.rgba(1, 1, 1, 0.3)
+	readonly property color textPlaceholder: Qt.rgba(1, 1, 1, 0.4)
+	readonly property color textPlaceholderDisabled: Qt.rgba(1, 1, 1, 0.15)
+	readonly property color textStatus: Qt.rgba(1, 1, 1, 0.55)
+
+	// Surface & accent colors
+	readonly property color selection: "#666666"
+	readonly property color surfaceTransparent: Qt.rgba(1, 1, 1, 0.1)
+	readonly property color surfaceTransparentDisabled: Qt.rgba(1, 1, 1, 0.05)
+	readonly property color surfaceButton: Qt.rgba(1, 1, 1, 0.08)
+	readonly property color spinnerStroke: Qt.rgba(1, 1, 1, 0.6)
+
+	// Background overlay
+	readonly property color overlayColor: "#000000"
+	readonly property real bgImageOpacity: 0.6
+	readonly property real overlayOpacity: 0.3
+
+	// Layout spacing
+	readonly property int spacingClock: 8
+	readonly property int spacingAuth: 16
+	readonly property int spacingFingerprint: 8
+	readonly property int spacingRetry: 6
+	readonly property int spacingCancel: 6
+
+	// Sizing
+	readonly property int passwordWidth: 200
+	readonly property int passwordPadding: 12
+	readonly property int passwordRadius: 6
+	readonly property int spinnerSize: 24
+	readonly property int spinnerInnerSize: 20
+	readonly property int spinnerMargin: 2
+	readonly property int spinnerStrokeWidth: 2
+	readonly property int buttonSize: 48
+
+	// Positions
+	readonly property int clockTopOffset: 60
+	readonly property int marginHintBottom: 60
+	readonly property int marginCancelBottom: 40
+
+	// Animation durations (ms)
+	readonly property int animClockMove: 500
+	readonly property int animPulse: 2000
+	readonly property int animSpinner: 800
+
+	// Timer intervals (ms)
+	readonly property int timerInterval: 1000
+
 	color: bg
 
 	Image {
 		anchors.fill: parent
 		source: "background.jpg"
 		fillMode: Image.PreserveAspectCrop
-		opacity: 0.6
+		opacity: bgImageOpacity
 	}
 
 	Rectangle {
 		anchors.fill: parent
-		color: "#000000"
-		opacity: 0.3
+		color: overlayColor
+		opacity: overlayOpacity
 	}
 
 	focus: true
@@ -52,12 +120,12 @@ Rectangle {
 	Column {
 		id: clockGroup
 		anchors.horizontalCenter: parent.horizontalCenter
-		y: root.context.pamActivated ? 60 : parent.height / 2 - height / 2
-		spacing: 8
+		y: root.context.pamActivated ? clockTopOffset : parent.height / 2 - height / 2
+		spacing: spacingClock
 
 		Behavior on y {
 			NumberAnimation {
-				duration: 500
+				duration: animClockMove
 				easing.type: Easing.InOutQuad
 			}
 		}
@@ -69,13 +137,14 @@ Rectangle {
 			anchors.horizontalCenter: parent.horizontalCenter
 
 			renderType: Text.NativeRendering
-			font.pointSize: 24
-			color: Qt.rgba(1, 1, 1, 0.7)
+			font.pointSize: fontDate
+			font.family: fontFamily
+			color: textPrimary
 
 			Timer {
 				running: true
 				repeat: true
-				interval: 1000
+				interval: timerInterval
 
 				onTriggered: dateLabel.date = new Date();
 			}
@@ -94,13 +163,14 @@ Rectangle {
 			anchors.horizontalCenter: parent.horizontalCenter
 
 			renderType: Text.NativeRendering
-			font.pointSize: 80
-			color: Qt.rgba(1, 1, 1, 0.7)
+			font.pointSize: fontClock
+			font.family: fontFamily
+			color: textPrimary
 
 			Timer {
 				running: true
 				repeat: true
-				interval: 1000
+				interval: timerInterval
 
 				onTriggered: clock.date = new Date();
 			}
@@ -119,19 +189,20 @@ Rectangle {
 			top: parent.verticalCenter
 		}
 
-		spacing: 16
+		spacing: spacingAuth
 
 		// Fingerprint indicator - shown while PAM is asking for a fingerprint
 		Column {
 			visible: root.context.isFingerprintPrompt
-			spacing: 8
+			spacing: spacingFingerprint
 			Layout.alignment: Qt.AlignHCenter
 
 			Label {
 				id: fingerprintIndicator
 				text: "󰈷"
 				color: fg
-				font.pointSize: 25
+				font.pointSize: fontFingerprintIcon
+				font.family: fontFamily
 				anchors.horizontalCenter: parent.horizontalCenter
 
 				SequentialAnimation {
@@ -143,21 +214,22 @@ Rectangle {
 						target: fingerprintIndicator
 						property: "opacity"
 						to: 0.4
-						duration: 2000
+						duration: animPulse
 					}
 					NumberAnimation {
 						target: fingerprintIndicator
 						property: "opacity"
 						to: 1.0
-						duration: 2000
+						duration: animPulse
 					}
 				}
 			}
 
 			Label {
 				text: root.context.pamMessage !== "" ? root.context.pamMessage : "Place your finger on the sensor"
-				color: Qt.rgba(1, 1, 1, 0.5)
-				font.pointSize: 12
+				color: textSecondary
+				font.pointSize: fontFingerprintMsg
+				font.family: fontFamily
 				anchors.horizontalCenter: parent.horizontalCenter
 			}
 		}
@@ -171,8 +243,8 @@ Rectangle {
 				id: passwordBox
 				placeholderText: "Enter password"
 
-				implicitWidth: 200
-				padding: 12
+				implicitWidth: passwordWidth
+				padding: passwordPadding
 
 				focus: true
 
@@ -186,14 +258,14 @@ Rectangle {
 				echoMode: TextInput.Password
 				inputMethodHints: Qt.ImhSensitiveData
 
-				color: enabled ? Qt.rgba(1, 1, 1, 0.7) : Qt.rgba(1, 1, 1, 0.3)
-				selectionColor: "#666666"
+				color: enabled ? textPrimary : textDisabled
+				selectionColor: selection
 				selectedTextColor: bg
-				placeholderTextColor: enabled ? Qt.rgba(1, 1, 1, 0.4) : Qt.rgba(1, 1, 1, 0.15)
+				placeholderTextColor: enabled ? textPlaceholder : textPlaceholderDisabled
 
 				background: Rectangle {
-					color: enabled ? Qt.rgba(1, 1, 1, 0.1) : Qt.rgba(1, 1, 1, 0.05)
-					radius: 6
+					color: enabled ? surfaceTransparent : surfaceTransparentDisabled
+					radius: passwordRadius
 				}
 
 				onTextChanged: root.context.currentText = this.text;
@@ -236,14 +308,15 @@ Rectangle {
 			//
 			// 	contentItem: Text {
 			// 		text: "›"
-			// 		color: parent.enabled ? Qt.rgba(1, 1, 1, 0.7) : Qt.rgba(1, 1, 1, 0.3)
+			// 		color: parent.enabled ? textPrimary : textDisabled
 			// 		font.pointSize: 28
+			// 		font.family: fontFamily
 			// 		horizontalAlignment: Text.AlignHCenter
 			// 		verticalAlignment: Text.AlignVCenter
 			// 	}
 			//
 			// 	background: Rectangle {
-			// 		color: parent.enabled ? Qt.rgba(1, 1, 1, 0.1) : Qt.rgba(1, 1, 1, 0.05)
+			// 		color: parent.enabled ? surfaceTransparent : surfaceTransparentDisabled
 			// 		radius: width / 2
 			// 	}
 			//
@@ -260,37 +333,37 @@ Rectangle {
 		// Spinner loader - shown while verifying
 		Item {
 			visible: root.context.unlockInProgress && root.context.pamResponseRequired
-			implicitWidth: 24
-			implicitHeight: 24
+			implicitWidth: spinnerSize
+			implicitHeight: spinnerSize
 			Layout.alignment: Qt.AlignHCenter
 
 			Rectangle {
 				anchors.centerIn: parent
-				width: 20
-				height: 20
+				width: spinnerInnerSize
+				height: spinnerInnerSize
 				color: "transparent"
 				transform: Rotation {
-					origin.x: 10
-					origin.y: 10
+					origin.x: spinnerInnerSize / 2
+					origin.y: spinnerInnerSize / 2
 					angle: 0
 
 					NumberAnimation on angle {
 						from: 0
 						to: 360
-						duration: 800
+						duration: animSpinner
 						loops: Animation.Infinite
 					}
 				}
 
 				Canvas {
 					anchors.fill: parent
-					anchors.margins: 2
+					anchors.margins: spinnerMargin
 
 					onPaint: {
 						var ctx = getContext("2d");
 						ctx.reset();
-						ctx.lineWidth = 2;
-						ctx.strokeStyle = Qt.rgba(1, 1, 1, 0.6);
+						ctx.lineWidth = spinnerStrokeWidth;
+						ctx.strokeStyle = spinnerStroke;
 						ctx.lineCap = "round";
 						ctx.beginPath();
 						ctx.arc(width / 2, height / 2, width / 2 - 1, 0, Math.PI * 1.5);
@@ -303,24 +376,25 @@ Rectangle {
 		// Retry button - shown after failed auth
 		Column {
 			visible: root.context.pamActivated && root.context.showFailure && !root.context.unlockInProgress
-			spacing: 6
+			spacing: spacingRetry
 			Layout.alignment: Qt.AlignHCenter
 
 			Button {
-				implicitWidth: 48
-				implicitHeight: 48
+				implicitWidth: buttonSize
+				implicitHeight: buttonSize
 
 				contentItem: Text {
 					text: "↻"
-					color: Qt.rgba(1, 1, 1, 0.5)
-					font.pointSize: 16
+					color: textSecondary
+					font.pointSize: fontRetryIcon
+					font.family: fontFamily
 					font.weight: Font.Bold
 					horizontalAlignment: Text.AlignHCenter
 					verticalAlignment: Text.AlignVCenter
 				}
 
 				background: Rectangle {
-					color: Qt.rgba(1, 1, 1, 0.08)
+					color: surfaceButton
 					radius: width / 2
 				}
 
@@ -329,8 +403,9 @@ Rectangle {
 
 			Text {
 				text: "Retry"
-				color: Qt.rgba(1, 1, 1, 0.35)
-				font.pointSize: 9
+				color: textHint
+				font.pointSize: fontRetryLabel
+				font.family: fontFamily
 				anchors.horizontalCenter: parent.horizontalCenter
 			}
 		}
@@ -346,8 +421,9 @@ Rectangle {
 					return "Authentication failed";
 				return "";
 			}
-			color: root.context.pamMessageIsError ? error : Qt.rgba(1, 1, 1, 0.55)
-			font.pointSize: 13
+			color: root.context.pamMessageIsError ? error : textStatus
+			font.pointSize: fontStatus
+			font.family: fontFamily
 			Layout.alignment: Qt.AlignHCenter
 		}
 	}
@@ -359,11 +435,12 @@ Rectangle {
 		anchors {
 			horizontalCenter: parent.horizontalCenter
 			bottom: parent.bottom
-			bottomMargin: 60
+			bottomMargin: marginHintBottom
 		}
 		text: "Click or press any key to unlock"
-		color: Qt.rgba(1, 1, 1, 0.4)
-		font.pointSize: 14
+		color: textMuted
+		font.pointSize: fontHint
+		font.family: fontFamily
 
 		SequentialAnimation {
 			id: hintPulseAnimation
@@ -374,13 +451,13 @@ Rectangle {
 				target: hintLabel
 				property: "opacity"
 				to: 0.5
-				duration: 2000
+				duration: animPulse
 			}
 			NumberAnimation {
 				target: hintLabel
 				property: "opacity"
 				to: 1.0
-				duration: 2000
+				duration: animPulse
 			}
 		}
 	}
@@ -390,25 +467,26 @@ Rectangle {
 		anchors {
 			horizontalCenter: parent.horizontalCenter
 			bottom: parent.bottom
-			bottomMargin: 40
+			bottomMargin: marginCancelBottom
 		}
-		spacing: 6
+		spacing: spacingCancel
 
 		Button {
-			implicitWidth: 48
-			implicitHeight: 48
+			implicitWidth: buttonSize
+			implicitHeight: buttonSize
 
 			contentItem: Text {
 				text: "✕"
-				color: Qt.rgba(1, 1, 1, 0.5)
-				font.pointSize: 16
+				color: textSecondary
+				font.pointSize: fontCancelIcon
+				font.family: fontFamily
 				font.weight: Font.Bold
 				horizontalAlignment: Text.AlignHCenter
 				verticalAlignment: Text.AlignVCenter
 			}
 
 			background: Rectangle {
-				color: Qt.rgba(1, 1, 1, 0.08)
+				color: surfaceButton
 				radius: width / 2
 			}
 
@@ -417,8 +495,9 @@ Rectangle {
 
 		Text {
 			text: "Cancel"
-			color: Qt.rgba(1, 1, 1, 0.35)
-			font.pointSize: 9
+			color: textHint
+			font.pointSize: fontCancelLabel
+			font.family: fontFamily
 			anchors.horizontalCenter: parent.horizontalCenter
 		}
 	}
