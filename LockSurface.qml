@@ -7,79 +7,21 @@ Rectangle {
 	id: root
 	required property LockContext context
 
-	// Base palette
-	readonly property color bg: "#000000"
-	readonly property color fg: "#ffffff"
-	readonly property color error: "#ff4444"
-	readonly property color selection: "#666666"
+	Config { id: config }
 
-	// Font
-	readonly property string fontFamily: "sans-serif"
-
-	// Type scale
-	readonly property int fontXs: 9    // small labels
-	readonly property int fontBase: 13 // body text
-	readonly property int fontLg: 16   // icon buttons
-	readonly property int fontXl: 24   // large text & icons
-	readonly property int font3xl: 80  // clock
-
-	// Spacing scale
-	readonly property int spaceXs: 6
-	readonly property int spaceSm: 8
-	readonly property int spaceMd: 16
-
-	// Text colors (fg at descending opacities)
-	readonly property color textPrimary: Qt.rgba(1, 1, 1, 0.7)
-	readonly property color textStatus: Qt.rgba(1, 1, 1, 0.55)
-	readonly property color textSecondary: Qt.rgba(1, 1, 1, 0.5)
-	readonly property color textMuted: Qt.rgba(1, 1, 1, 0.4)
-	readonly property color textHint: Qt.rgba(1, 1, 1, 0.35)
-	readonly property color textDisabled: Qt.rgba(1, 1, 1, 0.3)
-	readonly property color textTertiary: Qt.rgba(1, 1, 1, 0.15)
-
-	// Surface colors (white overlays)
-	readonly property color surfaceBg: Qt.rgba(1, 1, 1, 0.1)
-	readonly property color surfaceButton: Qt.rgba(1, 1, 1, 0.08)
-	readonly property color surfaceDisabled: Qt.rgba(1, 1, 1, 0.05)
-	readonly property color spinnerStroke: Qt.rgba(1, 1, 1, 0.6)
-
-	// Background layers
-	readonly property real bgImageOpacity: 0.6
-	readonly property real overlayOpacity: 0.3
-
-	// Component sizing
-	readonly property int passwordWidth: 200
-	readonly property int passwordPadding: 12
-	readonly property int passwordRadius: 6
-	readonly property int spinnerSize: 24
-	readonly property int spinnerMargin: 2
-	readonly property int spinnerStrokeWidth: 2
-	readonly property int buttonSize: 48
-
-	// Layout positions
-	readonly property int clockTopOffset: 60
-	readonly property int marginHintBottom: 60
-	readonly property int marginCancelBottom: 40
-
-	// Global animation duration (ms)
-	readonly property int animDuration: 600
-
-	// Timer intervals (ms)
-	readonly property int timerInterval: 1000
-
-	color: bg
+	color: config.bg
 
 	Image {
 		anchors.fill: parent
 		source: "background.jpg"
 		fillMode: Image.PreserveAspectCrop
-		opacity: bgImageOpacity
+		opacity: config.bgImageOpacity
 	}
 
 	Rectangle {
 		anchors.fill: parent
-		color: bg
-		opacity: overlayOpacity
+		color: config.bg
+		opacity: config.overlayOpacity
 	}
 
 	focus: true
@@ -105,12 +47,12 @@ Rectangle {
 	Column {
 		id: clockGroup
 		anchors.horizontalCenter: parent.horizontalCenter
-		y: root.context.pamActivated ? clockTopOffset : parent.height / 2 - height / 2
-		spacing: spaceSm
+		y: root.context.pamActivated ? config.clockTopOffset : parent.height / 2 - height / 2
+		spacing: config.spaceSm
 
 		Behavior on y {
 			NumberAnimation {
-				duration: animDuration
+				duration: config.animDuration
 				easing.type: Easing.InOutQuad
 			}
 		}
@@ -122,14 +64,14 @@ Rectangle {
 			anchors.horizontalCenter: parent.horizontalCenter
 
 			renderType: Text.NativeRendering
-			font.pointSize: fontXl
-			font.family: fontFamily
-			color: textPrimary
+			font.pointSize: config.fontXl
+			font.family: config.fontFamily
+			color: config.textPrimary
 
 			Timer {
 				running: true
 				repeat: true
-				interval: timerInterval
+				interval: config.timerInterval
 
 				onTriggered: dateLabel.date = new Date();
 			}
@@ -148,14 +90,14 @@ Rectangle {
 			anchors.horizontalCenter: parent.horizontalCenter
 
 			renderType: Text.NativeRendering
-			font.pointSize: font3xl
-			font.family: fontFamily
-			color: textPrimary
+			font.pointSize: config.font3xl
+			font.family: config.fontFamily
+			color: config.textPrimary
 
 			Timer {
 				running: true
 				repeat: true
-				interval: timerInterval
+				interval: config.timerInterval
 
 				onTriggered: clock.date = new Date();
 			}
@@ -174,20 +116,20 @@ Rectangle {
 			top: parent.verticalCenter
 		}
 
-		spacing: spaceMd
+		spacing: config.spaceMd
 
 		// Fingerprint indicator - shown while PAM is asking for a fingerprint
 		Column {
 			visible: root.context.isFingerprintPrompt
-			spacing: spaceSm
+			spacing: config.spaceSm
 			Layout.alignment: Qt.AlignHCenter
 
 			Label {
 				id: fingerprintIndicator
 				text: "󰈷"
-				color: fg
-font.pointSize: fontXl
-				font.family: fontFamily
+color: config.fg
+			font.pointSize: config.fontXl
+				font.family: config.fontFamily
 				anchors.horizontalCenter: parent.horizontalCenter
 
 				SequentialAnimation {
@@ -199,22 +141,22 @@ font.pointSize: fontXl
 						target: fingerprintIndicator
 						property: "opacity"
 						to: 0.4
-								duration: animDuration * 2
+								duration: config.animDuration * 2
 							}
 							NumberAnimation {
 								target: fingerprintIndicator
 								property: "opacity"
 								to: 1.0
-								duration: animDuration * 2
+								duration: config.animDuration * 2
 					}
 				}
 			}
 
 			Label {
 				text: root.context.pamMessage !== "" ? root.context.pamMessage : "Place your finger on the sensor"
-				color: textSecondary
-				font.pointSize: fontBase
-				font.family: fontFamily
+				color: config.textSecondary
+				font.pointSize: config.fontBase
+				font.family: config.fontFamily
 				anchors.horizontalCenter: parent.horizontalCenter
 			}
 		}
@@ -228,8 +170,8 @@ font.pointSize: fontXl
 				id: passwordBox
 				placeholderText: "Enter password"
 
-				implicitWidth: passwordWidth
-				padding: passwordPadding
+				implicitWidth: config.passwordWidth
+				padding: config.passwordPadding
 
 				focus: true
 
@@ -243,14 +185,14 @@ font.pointSize: fontXl
 				echoMode: TextInput.Password
 				inputMethodHints: Qt.ImhSensitiveData
 
-				color: enabled ? textPrimary : textDisabled
-				selectionColor: selection
-				selectedTextColor: bg
-				placeholderTextColor: enabled ? textMuted : textTertiary
+				color: enabled ? config.textPrimary : config.textDisabled
+				selectionColor: config.selection
+				selectedTextColor: config.bg
+				placeholderTextColor: enabled ? config.textMuted : config.textTertiary
 
 				background: Rectangle {
-					color: enabled ? surfaceBg : surfaceDisabled
-					radius: passwordRadius
+					color: enabled ? config.surfaceBg : config.surfaceDisabled
+					radius: config.passwordRadius
 				}
 
 				onTextChanged: root.context.currentText = this.text;
@@ -293,15 +235,15 @@ font.pointSize: fontXl
 			//
 			// 	contentItem: Text {
 			// 		text: "›"
-			// 		color: parent.enabled ? textPrimary : textDisabled
-// 				font.pointSize: fontXl
-			// 		font.family: fontFamily
+// 			color: parent.enabled ? config.textPrimary : config.textDisabled
+// 				font.pointSize: config.fontXl
+			// 		font.family: config.fontFamily
 			// 		horizontalAlignment: Text.AlignHCenter
 			// 		verticalAlignment: Text.AlignVCenter
 			// 	}
 			//
 			// 	background: Rectangle {
-			// 		color: parent.enabled ? surfaceBg : surfaceDisabled
+// 			color: parent.enabled ? config.surfaceBg : config.surfaceDisabled
 			// 		radius: width / 2
 			// 	}
 			//
@@ -318,37 +260,37 @@ font.pointSize: fontXl
 		// Spinner loader - shown while verifying
 		Item {
 			visible: root.context.unlockInProgress && root.context.pamResponseRequired
-			implicitWidth: spinnerSize
-			implicitHeight: spinnerSize
+			implicitWidth: config.spinnerSize
+			implicitHeight: config.spinnerSize
 			Layout.alignment: Qt.AlignHCenter
 
 			Rectangle {
 				anchors.centerIn: parent
-				width: spinnerSize - spinnerMargin * 2
-				height: spinnerSize - spinnerMargin * 2
+				width: config.spinnerSize - config.spinnerMargin * 2
+				height: config.spinnerSize - config.spinnerMargin * 2
 				color: "transparent"
 				transform: Rotation {
-					origin.x: (spinnerSize - spinnerMargin * 2) / 2
-					origin.y: (spinnerSize - spinnerMargin * 2) / 2
+					origin.x: (config.spinnerSize - config.spinnerMargin * 2) / 2
+					origin.y: (config.spinnerSize - config.spinnerMargin * 2) / 2
 					angle: 0
 
 					NumberAnimation on angle {
 						from: 0
 						to: 360
-									duration: animDuration * 2
+									duration: config.animDuration * 2
 									loops: Animation.Infinite
 								}
 				}
 
 				Canvas {
 					anchors.fill: parent
-					anchors.margins: spinnerMargin
+					anchors.margins: config.spinnerMargin
 
 					onPaint: {
 						var ctx = getContext("2d");
 						ctx.reset();
-						ctx.lineWidth = spinnerStrokeWidth;
-						ctx.strokeStyle = spinnerStroke;
+						ctx.lineWidth = config.spinnerStrokeWidth;
+						ctx.strokeStyle = config.spinnerStroke;
 						ctx.lineCap = "round";
 						ctx.beginPath();
 						ctx.arc(width / 2, height / 2, width / 2 - 1, 0, Math.PI * 1.5);
@@ -361,25 +303,25 @@ font.pointSize: fontXl
 		// Retry button - shown after failed auth
 		Column {
 			visible: root.context.pamActivated && root.context.showFailure && !root.context.unlockInProgress
-			spacing: spaceXs
+			spacing: config.spaceXs
 			Layout.alignment: Qt.AlignHCenter
 
 			Button {
-				implicitWidth: buttonSize
-				implicitHeight: buttonSize
+implicitWidth: config.buttonSize
+			implicitHeight: config.buttonSize
 
 				contentItem: Text {
 					text: "↻"
-					color: textSecondary
-					font.pointSize: fontLg
-					font.family: fontFamily
+					color: config.textSecondary
+					font.pointSize: config.fontLg
+					font.family: config.fontFamily
 					font.weight: Font.Bold
 					horizontalAlignment: Text.AlignHCenter
 					verticalAlignment: Text.AlignVCenter
 				}
 
 				background: Rectangle {
-					color: surfaceButton
+					color: config.surfaceButton
 					radius: width / 2
 				}
 
@@ -388,9 +330,9 @@ font.pointSize: fontXl
 
 			Text {
 				text: "Retry"
-				color: textHint
-				font.pointSize: fontXs
-				font.family: fontFamily
+				color: config.textHint
+				font.pointSize: config.fontXs
+				font.family: config.fontFamily
 				anchors.horizontalCenter: parent.horizontalCenter
 			}
 		}
@@ -406,9 +348,9 @@ font.pointSize: fontXl
 					return "Authentication failed";
 				return "";
 			}
-			color: root.context.pamMessageIsError ? error : textStatus
-			font.pointSize: fontBase
-			font.family: fontFamily
+			color: root.context.pamMessageIsError ? config.error : config.textStatus
+			font.pointSize: config.fontBase
+			font.family: config.fontFamily
 			Layout.alignment: Qt.AlignHCenter
 		}
 	}
@@ -420,12 +362,12 @@ font.pointSize: fontXl
 		anchors {
 			horizontalCenter: parent.horizontalCenter
 			bottom: parent.bottom
-			bottomMargin: marginHintBottom
+			bottomMargin: config.marginHintBottom
 		}
 		text: "Click or press any key to unlock"
-		color: textMuted
-		font.pointSize: fontBase
-		font.family: fontFamily
+		color: config.textMuted
+		font.pointSize: config.fontBase
+		font.family: config.fontFamily
 
 		SequentialAnimation {
 			id: hintPulseAnimation
@@ -436,13 +378,13 @@ font.pointSize: fontXl
 				target: hintLabel
 				property: "opacity"
 				to: 0.5
-				duration: animDuration * 2
+				duration: config.animDuration * 2
 			}
 			NumberAnimation {
 				target: hintLabel
 				property: "opacity"
 				to: 1.0
-				duration: animDuration * 2
+				duration: config.animDuration * 2
 			}
 		}
 	}
@@ -452,26 +394,26 @@ font.pointSize: fontXl
 		anchors {
 			horizontalCenter: parent.horizontalCenter
 			bottom: parent.bottom
-			bottomMargin: marginCancelBottom
+			bottomMargin: config.marginCancelBottom
 		}
-		spacing: spaceXs
+		spacing: config.spaceXs
 
 		Button {
-			implicitWidth: buttonSize
-			implicitHeight: buttonSize
+			implicitWidth: config.buttonSize
+			implicitHeight: config.buttonSize
 
 			contentItem: Text {
 				text: "✕"
-				color: textSecondary
-				font.pointSize: fontLg
-				font.family: fontFamily
+				color: config.textSecondary
+				font.pointSize: config.fontLg
+				font.family: config.fontFamily
 				font.weight: Font.Bold
 				horizontalAlignment: Text.AlignHCenter
 				verticalAlignment: Text.AlignVCenter
 			}
 
 			background: Rectangle {
-				color: surfaceButton
+				color: config.surfaceButton
 				radius: width / 2
 			}
 
@@ -480,9 +422,9 @@ font.pointSize: fontXl
 
 		Text {
 			text: "Cancel"
-			color: textHint
-			font.pointSize: fontXs
-			font.family: fontFamily
+			color: config.textHint
+			font.pointSize: config.fontXs
+			font.family: config.fontFamily
 			anchors.horizontalCenter: parent.horizontalCenter
 		}
 	}
