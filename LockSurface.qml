@@ -52,7 +52,6 @@ Rectangle {
 	readonly property int passwordPadding: 12
 	readonly property int passwordRadius: 6
 	readonly property int spinnerSize: 24
-	readonly property int spinnerInnerSize: 20
 	readonly property int spinnerMargin: 2
 	readonly property int spinnerStrokeWidth: 2
 	readonly property int buttonSize: 48
@@ -325,12 +324,12 @@ font.pointSize: fontXl
 
 			Rectangle {
 				anchors.centerIn: parent
-				width: spinnerInnerSize
-				height: spinnerInnerSize
+				width: spinnerSize - spinnerMargin * 2
+				height: spinnerSize - spinnerMargin * 2
 				color: "transparent"
 				transform: Rotation {
-					origin.x: spinnerInnerSize / 2
-					origin.y: spinnerInnerSize / 2
+					origin.x: (spinnerSize - spinnerMargin * 2) / 2
+					origin.y: (spinnerSize - spinnerMargin * 2) / 2
 					angle: 0
 
 					NumberAnimation on angle {
