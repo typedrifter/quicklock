@@ -1,0 +1,49 @@
+{
+  "bg": "#000000",
+  "fg": "#ffffff",
+  "error": "#ff4444",
+  "selection": "#666666",
+
+  "fontFamily": "sans-serif",
+
+  "fontXs": 9,
+  "fontBase": 13,
+  "fontLg": 16,
+  "fontXl": 24,
+  "font3xl": 80,
+
+  "spaceXs": 6,
+  "spaceSm": 8,
+  "spaceMd": 16,
+
+  "textPrimary": "#B3FFFFFF",
+  "textStatus": "#8CFFFFFF",
+  "textSecondary": "#80FFFFFF",
+  "textMuted": "#66FFFFFF",
+  "textHint": "#59FFFFFF",
+  "textDisabled": "#4DFFFFFF",
+  "textTertiary": "#26FFFFFF",
+
+  "surfaceBg": "#1AFFFFFF",
+  "surfaceButton": "#14FFFFFF",
+  "surfaceDisabled": "#0DFFFFFF",
+  "spinnerStroke": "#99FFFFFF",
+
+  "bgImageOpacity": 0.6,
+  "overlayOpacity": 0.3,
+
+  "passwordWidth": 200,
+  "passwordPadding": 12,
+  "passwordRadius": 6,
+  "spinnerSize": 24,
+  "spinnerMargin": 2,
+  "spinnerStrokeWidth": 2,
+  "buttonSize": 48,
+
+  "clockTopOffset": 60,
+  "marginHintBottom": 60,
+  "marginCancelBottom": 40,
+
+  "animDuration": 600,
+  "timerInterval": 1000
+}

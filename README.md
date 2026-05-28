@@ -41,6 +41,8 @@ PAM config lives in the `pam/` directory. The default config uses `password.conf
 
 Replace `background.jpg` with your own wallpaper if you like.
 
+UI customization is done through `config.json`. Edit this file to change colors, fonts, spacing, sizing, and animation timings. Changes are picked up automatically without restarting quickshell. Colors should be specified as hex strings (e.g. `#000000` or `#B3FFFFFF` for semi-transparent white).
+
 ## Development
 
 Run `qs -p ./test.qml` to preview the lock screen in a floating window without actually locking your session. Useful for tweaking the UI.

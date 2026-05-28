@@ -1,63 +1,119 @@
 import QtQuick
+import Quickshell.Io
 
 QtObject {
-	// Base palette
-	readonly property color bg: "#000000"
-	readonly property color fg: "#ffffff"
-	readonly property color error: "#ff4444"
-	readonly property color selection: "#666666"
+	id: root
 
-	// Font
-	readonly property string fontFamily: "sans-serif"
+	property FileView fileView: FileView {
+		// Path to the JSON configuration file.
+		// Place this file next to your shell.qml or adjust the path as needed.
+		path: "config.json"
 
-	// Type scale
-	readonly property int fontXs: 9    // small labels
-	readonly property int fontBase: 13 // body text
-	readonly property int fontLg: 16   // icon buttons
-	readonly property int fontXl: 24   // large text & icons
-	readonly property int font3xl: 80  // clock
+		// Reload configuration automatically when the file changes on disk.
+		watchChanges: true
+		onFileChanged: reload()
 
-	// Spacing scale
-	readonly property int spaceXs: 6
-	readonly property int spaceSm: 8
-	readonly property int spaceMd: 16
+		JsonAdapter {
+			id: adapter
 
-	// Text colors (fg at descending opacities)
-	readonly property color textPrimary: Qt.rgba(1, 1, 1, 0.7)
-	readonly property color textStatus: Qt.rgba(1, 1, 1, 0.55)
-	readonly property color textSecondary: Qt.rgba(1, 1, 1, 0.5)
-	readonly property color textMuted: Qt.rgba(1, 1, 1, 0.4)
-	readonly property color textHint: Qt.rgba(1, 1, 1, 0.35)
-	readonly property color textDisabled: Qt.rgba(1, 1, 1, 0.3)
-	readonly property color textTertiary: Qt.rgba(1, 1, 1, 0.15)
+			// Base palette
+			property string bg: "#000000"
+			property string fg: "#ffffff"
+			property string error: "#ff4444"
+			property string selection: "#666666"
 
-	// Surface colors (white overlays)
-	readonly property color surfaceBg: Qt.rgba(1, 1, 1, 0.1)
-	readonly property color surfaceButton: Qt.rgba(1, 1, 1, 0.08)
-	readonly property color surfaceDisabled: Qt.rgba(1, 1, 1, 0.05)
-	readonly property color spinnerStroke: Qt.rgba(1, 1, 1, 0.6)
+			// Font
+			property string fontFamily: "sans-serif"
 
-	// Background layers
-	readonly property real bgImageOpacity: 0.6
-	readonly property real overlayOpacity: 0.3
+			// Type scale
+			property int fontXs: 9
+			property int fontBase: 13
+			property int fontLg: 16
+			property int fontXl: 24
+			property int font3xl: 80
 
-	// Component sizing
-	readonly property int passwordWidth: 200
-	readonly property int passwordPadding: 12
-	readonly property int passwordRadius: 6
-	readonly property int spinnerSize: 24
-	readonly property int spinnerMargin: 2
-	readonly property int spinnerStrokeWidth: 2
-	readonly property int buttonSize: 48
+			// Spacing scale
+			property int spaceXs: 6
+			property int spaceSm: 8
+			property int spaceMd: 16
 
-	// Layout positions
-	readonly property int clockTopOffset: 60
-	readonly property int marginHintBottom: 60
-	readonly property int marginCancelBottom: 40
+			// Text colors (white at descending opacities)
+			property string textPrimary: "#B3FFFFFF"
+			property string textStatus: "#8CFFFFFF"
+			property string textSecondary: "#80FFFFFF"
+			property string textMuted: "#66FFFFFF"
+			property string textHint: "#59FFFFFF"
+			property string textDisabled: "#4DFFFFFF"
+			property string textTertiary: "#26FFFFFF"
 
-	// Global animation duration (ms)
-	readonly property int animDuration: 600
+			// Surface colors (white overlays)
+			property string surfaceBg: "#1AFFFFFF"
+			property string surfaceButton: "#14FFFFFF"
+			property string surfaceDisabled: "#0DFFFFFF"
+			property string spinnerStroke: "#99FFFFFF"
 
-	// Timer intervals (ms)
-	readonly property int timerInterval: 1000
+			// Background layers
+			property real bgImageOpacity: 0.6
+			property real overlayOpacity: 0.3
+
+			// Component sizing
+			property int passwordWidth: 200
+			property int passwordPadding: 12
+			property int passwordRadius: 6
+			property int spinnerSize: 24
+			property int spinnerMargin: 2
+			property int spinnerStrokeWidth: 2
+			property int buttonSize: 48
+
+			// Layout positions
+			property int clockTopOffset: 60
+			property int marginHintBottom: 60
+			property int marginCancelBottom: 40
+
+			// Global animation duration (ms)
+			property int animDuration: 600
+
+			// Timer intervals (ms)
+			property int timerInterval: 1000
+		}
+	}
+
+	property alias bg: adapter.bg
+	property alias fg: adapter.fg
+	property alias error: adapter.error
+	property alias selection: adapter.selection
+	property alias fontFamily: adapter.fontFamily
+	property alias fontXs: adapter.fontXs
+	property alias fontBase: adapter.fontBase
+	property alias fontLg: adapter.fontLg
+	property alias fontXl: adapter.fontXl
+	property alias font3xl: adapter.font3xl
+	property alias spaceXs: adapter.spaceXs
+	property alias spaceSm: adapter.spaceSm
+	property alias spaceMd: adapter.spaceMd
+	property alias textPrimary: adapter.textPrimary
+	property alias textStatus: adapter.textStatus
+	property alias textSecondary: adapter.textSecondary
+	property alias textMuted: adapter.textMuted
+	property alias textHint: adapter.textHint
+	property alias textDisabled: adapter.textDisabled
+	property alias textTertiary: adapter.textTertiary
+	property alias surfaceBg: adapter.surfaceBg
+	property alias surfaceButton: adapter.surfaceButton
+	property alias surfaceDisabled: adapter.surfaceDisabled
+	property alias spinnerStroke: adapter.spinnerStroke
+	property alias bgImageOpacity: adapter.bgImageOpacity
+	property alias overlayOpacity: adapter.overlayOpacity
+	property alias passwordWidth: adapter.passwordWidth
+	property alias passwordPadding: adapter.passwordPadding
+	property alias passwordRadius: adapter.passwordRadius
+	property alias spinnerSize: adapter.spinnerSize
+	property alias spinnerMargin: adapter.spinnerMargin
+	property alias spinnerStrokeWidth: adapter.spinnerStrokeWidth
+	property alias buttonSize: adapter.buttonSize
+	property alias clockTopOffset: adapter.clockTopOffset
+	property alias marginHintBottom: adapter.marginHintBottom
+	property alias marginCancelBottom: adapter.marginCancelBottom
+	property alias animDuration: adapter.animDuration
+	property alias timerInterval: adapter.timerInterval
 }
