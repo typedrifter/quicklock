@@ -18,11 +18,13 @@ QtObject {
 		}
 	}
 
-	// Resolve theme path from name. Falls back to sleek if the name is empty.
+	// Resolve theme path from name. Falls back to sleek if the name is empty or unsafe.
 	property string resolvedThemePath: {
 		const name = configAdapter.theme;
 		if (!name || name === "") return "themes/sleek/sleek.theme.json";
-		return "themes/" + name + "/" + name + ".theme.json";
+		const safeName = name.replace(/[^a-zA-Z0-9_-]/g, "");
+		if (safeName === "") return "themes/sleek/sleek.theme.json";
+		return "themes/" + safeName + "/" + safeName + ".theme.json";
 	}
 
 	// Single async theme load. Properties start with sleek defaults
