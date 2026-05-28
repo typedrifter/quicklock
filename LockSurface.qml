@@ -13,7 +13,7 @@ Rectangle {
 
 	Image {
 		anchors.fill: parent
-		source: "background.jpg"
+		source: config.wallpaper
 		fillMode: Image.PreserveAspectCrop
 		opacity: config.bgImageOpacity
 	}
@@ -59,6 +59,7 @@ Rectangle {
 
 		Label {
 			id: dateLabel
+			visible: config.showDate
 			property var date: new Date()
 
 			anchors.horizontalCenter: parent.horizontalCenter
@@ -103,9 +104,15 @@ Rectangle {
 			}
 
 			text: {
-				const hours = this.date.getHours().toString().padStart(2, '0');
+				let hours = this.date.getHours();
 				const minutes = this.date.getMinutes().toString().padStart(2, '0');
-				return `${hours}:${minutes}`;
+				if (!config.clock24h) {
+					const ampm = hours >= 12 ? 'PM' : 'AM';
+					hours = hours % 12;
+					hours = hours ? hours : 12;
+					return `${hours.toString().padStart(2, '0')}:${minutes} ${ampm}`;
+				}
+				return `${hours.toString().padStart(2, '0')}:${minutes}`;
 			}
 		}
 	}
@@ -358,7 +365,7 @@ implicitWidth: config.buttonSize
 	// Hint label - shown before any auth attempt
 	Label {
 		id: hintLabel
-		visible: !root.context.pamActivated
+		visible: config.showHint && !root.context.pamActivated
 		anchors {
 			horizontalCenter: parent.horizontalCenter
 			bottom: parent.bottom

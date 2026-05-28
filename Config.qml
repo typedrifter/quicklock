@@ -4,14 +4,32 @@ import Quickshell.Io
 QtObject {
 	id: root
 
-	property FileView fileView: FileView {
-		// Path to the JSON configuration file.
-		// Place this file next to your shell.qml or adjust the path as needed.
-		path: "config.json"
+	// Load user config
+	property FileView configFile: FileView {
+		path: "./config.json"
+		JsonAdapter {
+			id: configAdapter
+			property string theme: "sleek"
+			property string pamConfig: "password.conf"
+			property int timeout: 30
+			property bool showDate: true
+			property bool showHint: true
+			property bool clock24h: true
+		}
+	}
 
-		// Reload configuration automatically when the file changes on disk.
-		watchChanges: true
-		onFileChanged: reload()
+	// Resolve theme path from name. Falls back to sleek if the name is empty.
+	property string resolvedThemePath: {
+		const name = configAdapter.theme;
+		if (!name || name === "") return "themes/sleek/sleek.theme.json";
+		return "themes/" + name + "/" + name + ".theme.json";
+	}
+
+	// Single async theme load. Properties start with sleek defaults
+	// and update when theme.json arrives. No blocking, no watching.
+	property FileView themeFile: FileView {
+		id: themeFile
+		path: root.resolvedThemePath
 
 		JsonAdapter {
 			id: adapter
@@ -37,7 +55,7 @@ QtObject {
 			property int spaceSm: 8
 			property int spaceMd: 16
 
-			// Text colors (white at descending opacities)
+			// Text colors
 			property string textPrimary: "#B3FFFFFF"
 			property string textStatus: "#8CFFFFFF"
 			property string textSecondary: "#80FFFFFF"
@@ -46,13 +64,14 @@ QtObject {
 			property string textDisabled: "#4DFFFFFF"
 			property string textTertiary: "#26FFFFFF"
 
-			// Surface colors (white overlays)
+			// Surface colors
 			property string surfaceBg: "#1AFFFFFF"
 			property string surfaceButton: "#14FFFFFF"
 			property string surfaceDisabled: "#0DFFFFFF"
 			property string spinnerStroke: "#99FFFFFF"
 
 			// Background layers
+			property string wallpaper: ""
 			property real bgImageOpacity: 0.6
 			property real overlayOpacity: 0.3
 
@@ -70,14 +89,20 @@ QtObject {
 			property int marginHintBottom: 60
 			property int marginCancelBottom: 40
 
-			// Global animation duration (ms)
+			// Animation / timers
 			property int animDuration: 600
-
-			// Timer intervals (ms)
 			property int timerInterval: 1000
 		}
 	}
 
+	// Behavioural settings (from config.json)
+	property alias pamConfig: configAdapter.pamConfig
+	property alias timeout: configAdapter.timeout
+	property alias showDate: configAdapter.showDate
+	property alias showHint: configAdapter.showHint
+	property alias clock24h: configAdapter.clock24h
+
+	// Visual settings (from theme.json, with sleek defaults)
 	property alias bg: adapter.bg
 	property alias fg: adapter.fg
 	property alias error: adapter.error
@@ -102,6 +127,7 @@ QtObject {
 	property alias surfaceButton: adapter.surfaceButton
 	property alias surfaceDisabled: adapter.surfaceDisabled
 	property alias spinnerStroke: adapter.spinnerStroke
+	property alias wallpaper: adapter.wallpaper
 	property alias bgImageOpacity: adapter.bgImageOpacity
 	property alias overlayOpacity: adapter.overlayOpacity
 	property alias passwordWidth: adapter.passwordWidth
