@@ -134,8 +134,8 @@ Rectangle {
 			Label {
 				id: fingerprintIndicator
 				text: "󰈷"
-color: config.fg
-			font.pointSize: config.fontXl
+				color: config.fg
+				font.pointSize: config.fontXl
 				font.family: config.fontFamily
 				anchors.horizontalCenter: parent.horizontalCenter
 
@@ -148,13 +148,13 @@ color: config.fg
 						target: fingerprintIndicator
 						property: "opacity"
 						to: 0.4
-								duration: config.animDuration * 2
-							}
-							NumberAnimation {
-								target: fingerprintIndicator
-								property: "opacity"
-								to: 1.0
-								duration: config.animDuration * 2
+						duration: config.animDuration * 2
+					}
+					NumberAnimation {
+						target: fingerprintIndicator
+						property: "opacity"
+						to: 1.0
+						duration: config.animDuration * 2
 					}
 				}
 			}
@@ -284,9 +284,9 @@ color: config.fg
 					NumberAnimation on angle {
 						from: 0
 						to: 360
-									duration: config.animDuration * 2
-									loops: Animation.Infinite
-								}
+						duration: config.animDuration * 2
+						loops: Animation.Infinite
+					}
 				}
 
 				Canvas {
@@ -314,8 +314,8 @@ color: config.fg
 			Layout.alignment: Qt.AlignHCenter
 
 			Button {
-implicitWidth: config.buttonSize
-			implicitHeight: config.buttonSize
+				implicitWidth: config.buttonSize
+				implicitHeight: config.buttonSize
 
 				contentItem: Text {
 					text: "↻"
