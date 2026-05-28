@@ -76,22 +76,11 @@ Scope {
 
 		// Support both relative (to pam/) and absolute paths for the PAM config.
 		property string rawConfig: appConfig.pamConfig || "password.conf"
+		property bool rawIsAbsolute: rawConfig.charAt(0) === '/'
+		property int rawLastSlash: rawIsAbsolute ? rawConfig.lastIndexOf('/') : -1
 
-		configDirectory: {
-			if (rawConfig.charAt(0) === '/') {
-				var lastSlash = rawConfig.lastIndexOf('/');
-				return rawConfig.substring(0, lastSlash);
-			}
-			return "pam";
-		}
-
-		config: {
-			if (rawConfig.charAt(0) === '/') {
-				var lastSlash = rawConfig.lastIndexOf('/');
-				return rawConfig.substring(lastSlash + 1);
-			}
-			return rawConfig;
-		}
+		configDirectory: rawIsAbsolute ? rawConfig.substring(0, rawLastSlash) : "pam"
+		config: rawIsAbsolute ? rawConfig.substring(rawLastSlash + 1) : rawConfig
 
 		onPamMessage: {
 			if (this.responseRequired) {
