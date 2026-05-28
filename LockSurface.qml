@@ -231,37 +231,7 @@ Rectangle {
 				}
 			}
 
-			// Button {
-			// 	id: unlockButton
-			// 	implicitWidth: passwordBox.implicitHeight * .8
-			// 	implicitHeight: passwordBox.implicitHeight * .8
-			//
-			// 	focusPolicy: Qt.NoFocus
-			//
-			// 	enabled: !root.context.unlockInProgress && root.context.currentText !== "";
-			//
-			// 	contentItem: Text {
-			// 		text: "›"
-// 			color: parent.enabled ? config.textPrimary : config.textDisabled
-// 				font.pointSize: config.fontXl
-			// 		font.family: config.fontFamily
-			// 		horizontalAlignment: Text.AlignHCenter
-			// 		verticalAlignment: Text.AlignVCenter
-			// 	}
-			//
-			// 	background: Rectangle {
-// 			color: parent.enabled ? config.surfaceBg : config.surfaceDisabled
-			// 		radius: width / 2
-			// 	}
-			//
-			// 	onClicked: {
-			// 		if (root.context.pamResponseRequired) {
-			// 			root.context.respondToPam(passwordBox.text);
-			// 		} else {
-			// 			Qt.callLater(root.context.tryUnlock);
-			// 		}
-			// 	}
-			// }
+
 		}
 
 		// Spinner loader - shown while verifying
