@@ -1,0 +1,50 @@
+{
+  "_comment": "Catppuccin Mocha theme for quicklock",
+  "bg": "#1e1e2e",
+  "fg": "#cdd6f4",
+  "error": "#f38ba8",
+  "selection": "#cba6f7",
+
+  "fontFamily": "monospace",
+
+  "fontXs": 9,
+  "fontBase": 13,
+  "fontLg": 16,
+  "fontXl": 24,
+  "font3xl": 80,
+
+  "spaceXs": 6,
+  "spaceSm": 8,
+  "spaceMd": 16,
+
+  "textPrimary": "#f5c2e7",
+  "textStatus": "#fab387",
+  "textSecondary": "#89b4fa",
+  "textMuted": "#94e2d5",
+  "textHint": "#a6e3a1",
+  "textDisabled": "#6c7086",
+  "textTertiary": "#45475a",
+
+  "surfaceBg": "#313244",
+  "surfaceButton": "#45475a",
+  "surfaceDisabled": "#313244",
+  "spinnerStroke": "#cba6f7",
+
+  "bgImageOpacity": 0.0,
+  "overlayOpacity": 1.0,
+
+  "passwordWidth": 200,
+  "passwordPadding": 12,
+  "passwordRadius": 6,
+  "spinnerSize": 24,
+  "spinnerMargin": 2,
+  "spinnerStrokeWidth": 2,
+  "buttonSize": 48,
+
+  "clockTopOffset": 60,
+  "marginHintBottom": 60,
+  "marginCancelBottom": 40,
+
+  "animDuration": 600,
+  "timerInterval": 1000
+}

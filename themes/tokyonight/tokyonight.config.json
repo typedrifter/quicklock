@@ -1,0 +1,50 @@
+{
+  "_comment": "Tokyo Night theme for quicklock",
+  "bg": "#1a1b26",
+  "fg": "#a9b1d6",
+  "error": "#f7768e",
+  "selection": "#7aa2f7",
+
+  "fontFamily": "monospace",
+
+  "fontXs": 9,
+  "fontBase": 13,
+  "fontLg": 16,
+  "fontXl": 24,
+  "font3xl": 80,
+
+  "spaceXs": 6,
+  "spaceSm": 8,
+  "spaceMd": 16,
+
+  "textPrimary": "#c0caf5",
+  "textStatus": "#e0af68",
+  "textSecondary": "#7aa2f7",
+  "textMuted": "#9ece6a",
+  "textHint": "#bb9af7",
+  "textDisabled": "#565f89",
+  "textTertiary": "#414868",
+
+  "surfaceBg": "#24283b",
+  "surfaceButton": "#414868",
+  "surfaceDisabled": "#24283b",
+  "spinnerStroke": "#7dcfff",
+
+  "bgImageOpacity": 0.0,
+  "overlayOpacity": 1.0,
+
+  "passwordWidth": 200,
+  "passwordPadding": 12,
+  "passwordRadius": 6,
+  "spinnerSize": 24,
+  "spinnerMargin": 2,
+  "spinnerStrokeWidth": 2,
+  "buttonSize": 48,
+
+  "clockTopOffset": 60,
+  "marginHintBottom": 60,
+  "marginCancelBottom": 40,
+
+  "animDuration": 600,
+  "timerInterval": 1000
+}
