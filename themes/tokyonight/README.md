@@ -21,8 +21,11 @@ A dark, neon-accented theme for quicklock based on the [Tokyo Night](https://git
 
 ## Usage
 
-```bash
-ln -sf themes/tokyonight/tokyonight.config.json config.json
+Edit `config.json`:
+
+```json
+{
+  "theme": "tokyonight"
+}
 ```
 
-Note: by default `bgImageOpacity` is set to `0.0` for a solid background. Set it to `0.6` to show the wallpaper.

@@ -4,19 +4,7 @@
   "fg": "#cdcecf",
   "error": "#c94f6d",
   "selection": "#719cd6",
-
   "fontFamily": "monospace",
-
-  "fontXs": 9,
-  "fontBase": 13,
-  "fontLg": 16,
-  "fontXl": 24,
-  "font3xl": 80,
-
-  "spaceXs": 6,
-  "spaceSm": 8,
-  "spaceMd": 16,
-
   "textPrimary": "#e4cfff",
   "textStatus": "#f4a261",
   "textSecondary": "#63cdcf",
@@ -24,27 +12,9 @@
   "textHint": "#d67ad2",
   "textDisabled": "#738091",
   "textTertiary": "#39506d",
-
   "surfaceBg": "#212e3f",
   "surfaceButton": "#39506d",
   "surfaceDisabled": "#212e3f",
   "spinnerStroke": "#d67ad2",
-
-  "bgImageOpacity": 0.0,
-  "overlayOpacity": 1.0,
-
-  "passwordWidth": 200,
-  "passwordPadding": 12,
-  "passwordRadius": 6,
-  "spinnerSize": 24,
-  "spinnerMargin": 2,
-  "spinnerStrokeWidth": 2,
-  "buttonSize": 48,
-
-  "clockTopOffset": 60,
-  "marginHintBottom": 60,
-  "marginCancelBottom": 40,
-
-  "animDuration": 600,
-  "timerInterval": 1000
+  "wallpaper": "themes/nightfox/wallpaper.jpg"
 }

@@ -21,8 +21,11 @@ A soft, pastel-colored theme for quicklock based on the [Catppuccin Mocha](https
 
 ## Usage
 
-```bash
-ln -sf themes/catppuccin/catppuccin.config.json config.json
+Edit `config.json`:
+
+```json
+{
+  "theme": "catppuccin"
+}
 ```
 
-Note: by default `bgImageOpacity` is set to `0.0` for a solid background. Set it to `0.6` to show the wallpaper.

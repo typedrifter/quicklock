@@ -1,0 +1,20 @@
+{
+  "_comment": "Sleek default theme for quicklock",
+  "bg": "#000000",
+  "fg": "#ffffff",
+  "error": "#ff4444",
+  "selection": "#666666",
+  "fontFamily": "sans-serif",
+  "textPrimary": "#B3FFFFFF",
+  "textStatus": "#8CFFFFFF",
+  "textSecondary": "#80FFFFFF",
+  "textMuted": "#66FFFFFF",
+  "textHint": "#59FFFFFF",
+  "textDisabled": "#4DFFFFFF",
+  "textTertiary": "#26FFFFFF",
+  "surfaceBg": "#1AFFFFFF",
+  "surfaceButton": "#14FFFFFF",
+  "surfaceDisabled": "#0DFFFFFF",
+  "spinnerStroke": "#99FFFFFF",
+  "wallpaper": "themes/sleek/wallpaper.jpg"
+}

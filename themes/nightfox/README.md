@@ -21,8 +21,11 @@ A deep blue-gray theme for quicklock inspired by the [Nightfox](https://github.c
 
 ## Usage
 
-```bash
-ln -sf themes/nightfox/nightfox.config.json config.json
+Edit `config.json`:
+
+```json
+{
+  "theme": "nightfox"
+}
 ```
 
-Note: by default `bgImageOpacity` is set to `0.0` for a solid background. Set it to `0.6` to show the wallpaper.
