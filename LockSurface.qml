@@ -49,6 +49,15 @@ Rectangle {
 		}
 	}
 
+	Connections {
+		target: root.context
+		function onPamActivatedChanged() {
+			if (!root.context.pamActivated) {
+				root.forceActiveFocus();
+			}
+		}
+	}
+
 	Column {
 		id: clockGroup
 		anchors.horizontalCenter: parent.horizontalCenter
@@ -174,10 +183,10 @@ Rectangle {
 				implicitWidth: 200
 				padding: 12
 
-				focus: true
+				focus: root.context.pamResponseRequired
 
 				onActiveFocusChanged: {
-					if (!activeFocus && visible) {
+					if (!activeFocus && visible && root.context.pamResponseRequired) {
 						Qt.callLater(forceActiveFocus);
 					}
 				}
@@ -211,6 +220,16 @@ Rectangle {
 
 					function onCurrentTextChanged() {
 						passwordBox.text = root.context.currentText;
+					}
+				}
+
+				Connections {
+					target: root.context
+
+					function onPamActivatedChanged() {
+						if (!root.context.pamActivated) {
+							passwordBox.text = "";
+						}
 					}
 				}
 
