@@ -168,4 +168,46 @@ Rectangle {
             }
         }
     }
+
+    Label {
+        id: cancelLabel
+
+        text: "press esc to cancel"
+
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 50
+        anchors.horizontalCenter: parent.horizontalCenter
+
+        font.pointSize: 12
+
+        opacity: root.showUnlock ? .2 : 0
+        visible: opacity > 0
+
+        Behavior on opacity {
+            NumberAnimation {
+                duration: 250
+            }
+        }
+
+        SequentialAnimation {
+            running: root.showUnlock
+            loops: Animation.Infinite
+
+            NumberAnimation {
+                target: cancelLabel
+                property: "opacity"
+                from: 0.2
+                to: 0.75
+                duration: 1000
+            }
+
+            NumberAnimation {
+                target: cancelLabel
+                property: "opacity"
+                from: 0.75
+                to: 0.2
+                duration: 1000
+            }
+        }
+    }
 }
