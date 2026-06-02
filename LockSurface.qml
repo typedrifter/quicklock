@@ -57,8 +57,7 @@ Rectangle {
         }
         property var date: new Date()
 
-        y: root.showUnlock ? 60 : parent.height / 2 - height / 2
-        spacing: 8
+        y: root.showUnlock ? parent.height / 4 : parent.height / 2 - height / 2
 
         Behavior on y {
             NumberAnimation {
