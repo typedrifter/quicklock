@@ -29,6 +29,7 @@ Rectangle {
         }
 
         MouseArea {
+            cursorShape: Qt.BlankCursor
             anchors.fill: parent
             onClicked: {
                 if (root.showUnlock)
