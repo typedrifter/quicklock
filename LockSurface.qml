@@ -7,11 +7,18 @@ import QtMultimedia
 Rectangle {
     id: root
     required property LockContext context
-    readonly property ColorGroup colors: Window.active ? palette.active : palette.inactive
-
-    color: colors.window
 
     property bool showUnlock: false
+
+    // video background
+    Video {
+        id: video
+        anchors.fill: parent
+        fillMode: VideoOutput.PreserveAspectCrop
+        loops: MediaPlayer.Infinite
+        source: Qt.resolvedUrl("video.mp4")
+        autoPlay: true
+    }
 
     // Listen to keys and mouse click
     // manage the main show/hide unlock logic
