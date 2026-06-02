@@ -2,103 +2,171 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls.Fusion
 import Quickshell.Wayland
+import QtMultimedia
 
 Rectangle {
-	id: root
-	required property LockContext context
-	readonly property ColorGroup colors: Window.active ? palette.active : palette.inactive
+    id: root
+    required property LockContext context
+    readonly property ColorGroup colors: Window.active ? palette.active : palette.inactive
 
-	color: colors.window
+    color: colors.window
 
-	Button {
-		text: "Its not working, let me out"
-		onClicked: context.unlocked();
-	}
+    property bool showUnlock: false
 
-	Label {
-		id: clock
-		property var date: new Date()
+    // Listen to keys and mouse click
+    // manage the main show/hide unlock logic
+    Rectangle {
+        id: mainListener
+        anchors.fill: parent
+        color: "#000000"
+        opacity: 0
+        focus: true
 
-		anchors {
-			horizontalCenter: parent.horizontalCenter
-			top: parent.top
-			topMargin: 100
-		}
+        Keys.onPressed: event => {
+            if (root.showUnlock)
+                return;
+            root.showUnlock = true;
+        }
 
-		// The native font renderer tends to look nicer at large sizes.
-		renderType: Text.NativeRendering
-		font.pointSize: 80
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                if (root.showUnlock)
+                    return;
+                root.showUnlock = true;
+            }
+        }
 
-		// updates the clock every second
-		Timer {
-			running: true
-			repeat: true
-			interval: 1000
+        // hide unlock input after 10 seconds of idle
+        IdleMonitor {
+            id: idle
+            timeout: 10
+            onIsIdleChanged: {
+                if (isIdle) {
+                    root.showUnlock = false;
+                    mainListener.focus = true;
+                }
+            }
+        }
+    }
 
-			onTriggered: clock.date = new Date();
-		}
+    ColumnLayout {
+        id: dateTime
+        anchors {
+            horizontalCenter: parent.horizontalCenter
+        }
+        property var date: new Date()
 
-		// updated when the date changes
-		text: {
-			const hours = this.date.getHours().toString().padStart(2, '0');
-			const minutes = this.date.getMinutes().toString().padStart(2, '0');
-			return `${hours}:${minutes}`;
-		}
-	}
+        y: root.showUnlock ? 60 : parent.height / 2 - height / 2
+        spacing: 8
 
-	ColumnLayout {
-		// Uncommenting this will make the password entry invisible except on the active monitor.
-		// visible: Window.active
+        Behavior on y {
+            NumberAnimation {
+                duration: 500
+                easing.type: Easing.InOutQuad
+            }
+        }
 
-		anchors {
-			horizontalCenter: parent.horizontalCenter
-			top: parent.verticalCenter
-		}
+        // updates the clock every second
+        Timer {
+            running: true
+            repeat: true
+            interval: 1000
 
-		RowLayout {
-			TextField {
-				id: passwordBox
+            onTriggered: parent.date = new Date()
+        }
 
-				implicitWidth: 400
-				padding: 10
+        Label {
+            id: date
+            Layout.alignment: Qt.AlignHCenter
 
-				focus: true
-				enabled: !root.context.unlockInProgress
-				echoMode: TextInput.Password
-				inputMethodHints: Qt.ImhSensitiveData
+            renderType: Text.NativeRendering
+            font.pointSize: 30
 
-				// Update the text in the context when the text in the box changes.
-				onTextChanged: root.context.currentText = this.text;
+            // updated when the date changes
+            text: {
+                Qt.formatDate(dateTime.date, "dddd d MMMM");
+            }
+        }
 
-				// Try to unlock when enter is pressed.
-				onAccepted: root.context.tryUnlock();
+        Label {
+            id: clock
+            Layout.alignment: Qt.AlignHCenter
 
-				// Update the text in the box to match the text in the context.
-				// This makes sure multiple monitors have the same text.
-				Connections {
-					target: root.context
+            renderType: Text.NativeRendering
+            font.pointSize: 80
 
-					function onCurrentTextChanged() {
-						passwordBox.text = root.context.currentText;
-					}
-				}
-			}
+            // updated when the date changes
+            text: {
+                const hours = dateTime.date.getHours().toString().padStart(2, '0');
+                const minutes = dateTime.date.getMinutes().toString().padStart(2, '0');
+                return `${hours}:${minutes}`;
+            }
+        }
+    }
 
-			Button {
-				text: "Unlock"
-				padding: 10
+    ColumnLayout {
+        id: unlockColumn
 
-				// don't steal focus from the text box
-				focusPolicy: Qt.NoFocus
+        opacity: root.showUnlock ? 1 : 0
+        visible: opacity != 0
 
-				enabled: !root.context.unlockInProgress && root.context.currentText !== "";
-				onClicked: root.context.tryUnlock();
-			}
-		}
+        Behavior on opacity {
+            NumberAnimation {
+                duration: 500
+                easing.type: Easing.InOutQuad
+            }
+        }
 
-		Label {
-			visible: root.context.showFailure
-			text: "Incorrect password"
-		}
-	}
+        anchors {
+            horizontalCenter: parent.horizontalCenter
+            verticalCenter: parent.verticalCenter
+        }
+
+        TextField {
+            id: passwordInput
+            focus: unlockColumn.visible
+            echoMode: TextInput.Password
+            inputMethodHints: Qt.ImhSensitiveData
+            placeholderText: "Enter password"
+
+            // Update the text in the context when the text in the box changes.
+            onTextChanged: root.context.currentText = this.text
+
+            // Try to unlock when enter is pressed.
+            onAccepted: root.context.tryUnlock()
+
+            implicitWidth: 200
+            padding: 10
+
+            background: Rectangle {
+                color: Qt.rgba(0, 0, 0, 0.25)
+                radius: 6
+            }
+
+            Layout.alignment: Qt.AlignHCenter
+            renderType: Text.NativeRendering
+            font.pointSize: 14
+            // horizontalAlignment: Qt.AlignHCenter
+            verticalAlignment: Qt.AlignVCenter
+            text: ""
+            cursorVisible: false
+
+            // reset if esc is pressed
+            Keys.onPressed: event => {
+                if (event.key == Qt.Key_Escape) {
+                    root.showUnlock = !root.showUnlock;
+                    // set focus back to the main listener
+                    mainListener.focus = true;
+                }
+            }
+
+            // reset if input is hidden
+            onVisibleChanged: {
+                if (!visible) {
+                    text = "";
+                }
+            }
+        }
+    }
 }
