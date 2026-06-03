@@ -7,6 +7,8 @@ Scope {
 	signal unlocked()
 	signal failed()
 
+	required property Config config
+
 	property string currentText: ""
 	property bool unlockInProgress: false
 	property bool showFailure: false
@@ -64,7 +66,7 @@ Scope {
 
 	Timer {
 		id: timeoutTimer
-		interval: 30000
+		interval: root.config.pam.timeout
 		repeat: false
 		onTriggered: cancelPam()
 	}
@@ -72,8 +74,8 @@ Scope {
 	PamContext {
 		id: pam
 
-		configDirectory: "pam"
-		config: "password.conf"
+		configDirectory: root.config.pam.configDirectory
+		config: root.config.pam.config
 
 		onPamMessage: {
 			if (this.responseRequired) {

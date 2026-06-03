@@ -6,27 +6,24 @@ import Quickshell.Wayland
 Rectangle {
 	id: root
 	required property LockContext context
+	required property Config config
 
-	readonly property color bg: "#000000"
-	readonly property color fg: "#ffffff"
-	readonly property color surface: "#1a1a1a"
-	readonly property color border: "#333333"
-	readonly property color accent: "#4a4a4a"
-	readonly property color error: "#ff4444"
+	readonly property color bg: root.config.colors.bg
+	readonly property color fg: root.config.colors.fg
+	readonly property color error: root.config.colors.error
 
 	color: bg
 
 	Image {
 		anchors.fill: parent
-		source: "background.jpg"
+		source: root.config.background.image
 		fillMode: Image.PreserveAspectCrop
-		opacity: 0.6
+		opacity: root.config.background.opacity
 	}
 
 	Rectangle {
 		anchors.fill: parent
-		color: "#000000"
-		opacity: 0.3
+		color: root.config.colors.overlay
 	}
 
 	focus: true
@@ -65,8 +62,9 @@ Rectangle {
 		spacing: 8
 
 		Behavior on y {
+			enabled: root.config.animations.enabled
 			NumberAnimation {
-				duration: 500
+				duration: root.config.animations.clockMoveDuration
 				easing.type: Easing.InOutQuad
 			}
 		}
@@ -78,8 +76,8 @@ Rectangle {
 			anchors.horizontalCenter: parent.horizontalCenter
 
 			renderType: Text.NativeRendering
-			font.pointSize: 24
-			color: Qt.rgba(1, 1, 1, 0.7)
+			font.pointSize: root.config.fonts.dateSize
+			color: root.config.colors.textHigh
 
 			Timer {
 				running: true
@@ -103,8 +101,8 @@ Rectangle {
 			anchors.horizontalCenter: parent.horizontalCenter
 
 			renderType: Text.NativeRendering
-			font.pointSize: 80
-			color: Qt.rgba(1, 1, 1, 0.7)
+			font.pointSize: root.config.fonts.clockSize
+			color: root.config.colors.textHigh
 
 			Timer {
 				running: true
@@ -140,33 +138,33 @@ Rectangle {
 				id: fingerprintIndicator
 				text: "󰈷"
 				color: fg
-				font.pointSize: 25
+				font.pointSize: root.config.fonts.fingerprintSize
 				anchors.horizontalCenter: parent.horizontalCenter
 
 				SequentialAnimation {
 					id: pulseAnimation
-					running: fingerprintIndicator.visible
+					running: root.config.animations.enabled && fingerprintIndicator.visible
 					loops: Animation.Infinite
 
 					NumberAnimation {
 						target: fingerprintIndicator
 						property: "opacity"
 						to: 0.4
-						duration: 2000
+						duration: root.config.animations.pulseDuration
 					}
 					NumberAnimation {
 						target: fingerprintIndicator
 						property: "opacity"
 						to: 1.0
-						duration: 2000
+						duration: root.config.animations.pulseDuration
 					}
 				}
 			}
 
 			Label {
-				text: root.context.pamMessage !== "" ? root.context.pamMessage : "Place your finger on the sensor"
-				color: Qt.rgba(1, 1, 1, 0.5)
-				font.pointSize: 12
+				text: root.context.pamMessage !== "" ? root.context.pamMessage : root.config.texts.fingerprintPrompt
+				color: root.config.colors.textMid
+				font.pointSize: root.config.fonts.passwordSize
 				anchors.horizontalCenter: parent.horizontalCenter
 			}
 		}
@@ -178,7 +176,7 @@ Rectangle {
 
 			TextField {
 				id: passwordBox
-				placeholderText: "Enter password"
+				placeholderText: root.config.texts.passwordPlaceholder
 
 				implicitWidth: 200
 				padding: 12
@@ -195,13 +193,15 @@ Rectangle {
 				echoMode: TextInput.Password
 				inputMethodHints: Qt.ImhSensitiveData
 
-				color: enabled ? Qt.rgba(1, 1, 1, 0.7) : Qt.rgba(1, 1, 1, 0.3)
-				selectionColor: "#666666"
+				font.pointSize: root.config.fonts.passwordSize
+
+				color: enabled ? root.config.colors.textHigh : root.config.colors.textLow
+				selectionColor: root.config.colors.selection
 				selectedTextColor: bg
-				placeholderTextColor: enabled ? Qt.rgba(1, 1, 1, 0.4) : Qt.rgba(1, 1, 1, 0.15)
+				placeholderTextColor: enabled ? root.config.colors.textMid : root.config.colors.textVeryLow
 
 				background: Rectangle {
-					color: enabled ? Qt.rgba(1, 1, 1, 0.1) : Qt.rgba(1, 1, 1, 0.05)
+					color: enabled ? root.config.colors.accentBg : root.config.colors.accentBgDisabled
 					radius: 6
 				}
 
@@ -243,37 +243,6 @@ Rectangle {
 					}
 				}
 			}
-
-			// Button {
-			// 	id: unlockButton
-			// 	implicitWidth: passwordBox.implicitHeight * .8
-			// 	implicitHeight: passwordBox.implicitHeight * .8
-			//
-			// 	focusPolicy: Qt.NoFocus
-			//
-			// 	enabled: !root.context.unlockInProgress && root.context.currentText !== "";
-			//
-			// 	contentItem: Text {
-			// 		text: "›"
-			// 		color: parent.enabled ? Qt.rgba(1, 1, 1, 0.7) : Qt.rgba(1, 1, 1, 0.3)
-			// 		font.pointSize: 28
-			// 		horizontalAlignment: Text.AlignHCenter
-			// 		verticalAlignment: Text.AlignVCenter
-			// 	}
-			//
-			// 	background: Rectangle {
-			// 		color: parent.enabled ? Qt.rgba(1, 1, 1, 0.1) : Qt.rgba(1, 1, 1, 0.05)
-			// 		radius: width / 2
-			// 	}
-			//
-			// 	onClicked: {
-			// 		if (root.context.pamResponseRequired) {
-			// 			root.context.respondToPam(passwordBox.text);
-			// 		} else {
-			// 			Qt.callLater(root.context.tryUnlock);
-			// 		}
-			// 	}
-			// }
 		}
 
 		// Spinner loader - shown while verifying
@@ -294,9 +263,10 @@ Rectangle {
 					angle: 0
 
 					NumberAnimation on angle {
+						running: root.config.animations.enabled
 						from: 0
 						to: 360
-						duration: 800
+						duration: root.config.animations.spinnerDuration
 						loops: Animation.Infinite
 					}
 				}
@@ -309,7 +279,7 @@ Rectangle {
 						var ctx = getContext("2d");
 						ctx.reset();
 						ctx.lineWidth = 2;
-						ctx.strokeStyle = Qt.rgba(1, 1, 1, 0.6);
+						ctx.strokeStyle = root.config.colors.spinner;
 						ctx.lineCap = "round";
 						ctx.beginPath();
 						ctx.arc(width / 2, height / 2, width / 2 - 1, 0, Math.PI * 1.5);
@@ -330,16 +300,16 @@ Rectangle {
 				implicitHeight: 48
 
 				contentItem: Text {
-					text: "↻"
-					color: Qt.rgba(1, 1, 1, 0.5)
-					font.pointSize: 16
+					text: root.config.texts.retryIcon
+					color: root.config.colors.textMid
+					font.pointSize: root.config.fonts.retrySize
 					font.weight: Font.Bold
 					horizontalAlignment: Text.AlignHCenter
 					verticalAlignment: Text.AlignVCenter
 				}
 
 				background: Rectangle {
-					color: Qt.rgba(1, 1, 1, 0.08)
+					color: root.config.colors.accentBg
 					radius: width / 2
 				}
 
@@ -347,8 +317,8 @@ Rectangle {
 			}
 
 			Text {
-				text: "Retry"
-				color: Qt.rgba(1, 1, 1, 0.35)
+				text: root.config.texts.retryLabel
+				color: root.config.colors.textLabel
 				font.pointSize: 9
 				anchors.horizontalCenter: parent.horizontalCenter
 			}
@@ -362,11 +332,11 @@ Rectangle {
 				if (root.context.pamMessageIsError)
 					return root.context.pamMessage;
 				if (root.context.showFailure)
-					return "Authentication failed";
+					return root.config.texts.authFailed;
 				return "";
 			}
-			color: root.context.pamMessageIsError ? error : Qt.rgba(1, 1, 1, 0.55)
-			font.pointSize: 13
+			color: root.context.pamMessageIsError ? error : root.config.colors.textStatus
+			font.pointSize: root.config.fonts.statusSize
 			Layout.alignment: Qt.AlignHCenter
 		}
 	}
@@ -380,26 +350,26 @@ Rectangle {
 			bottom: parent.bottom
 			bottomMargin: 60
 		}
-		text: "Click or press any key to unlock"
-		color: Qt.rgba(1, 1, 1, 0.4)
-		font.pointSize: 14
+		text: root.config.texts.hint
+		color: root.config.colors.textHint
+		font.pointSize: root.config.fonts.hintSize
 
 		SequentialAnimation {
 			id: hintPulseAnimation
-			running: hintLabel.visible
+			running: root.config.animations.enabled && hintLabel.visible
 			loops: Animation.Infinite
 
 			NumberAnimation {
 				target: hintLabel
 				property: "opacity"
 				to: 0.5
-				duration: 2000
+				duration: root.config.animations.pulseDuration
 			}
 			NumberAnimation {
 				target: hintLabel
 				property: "opacity"
 				to: 1.0
-				duration: 2000
+				duration: root.config.animations.pulseDuration
 			}
 		}
 	}
@@ -418,16 +388,16 @@ Rectangle {
 			implicitHeight: 48
 
 			contentItem: Text {
-				text: "✕"
-				color: Qt.rgba(1, 1, 1, 0.5)
-				font.pointSize: 16
+				text: root.config.texts.cancelIcon
+				color: root.config.colors.textMid
+				font.pointSize: root.config.fonts.cancelSize
 				font.weight: Font.Bold
 				horizontalAlignment: Text.AlignHCenter
 				verticalAlignment: Text.AlignVCenter
 			}
 
 			background: Rectangle {
-				color: Qt.rgba(1, 1, 1, 0.08)
+				color: root.config.colors.accentBg
 				radius: width / 2
 			}
 
@@ -435,8 +405,8 @@ Rectangle {
 		}
 
 		Text {
-			text: "Cancel"
-			color: Qt.rgba(1, 1, 1, 0.35)
+			text: root.config.texts.cancelLabel
+			color: root.config.colors.textLabel
 			font.pointSize: 9
 			anchors.horizontalCenter: parent.horizontalCenter
 		}
