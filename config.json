@@ -1,0 +1,8 @@
+{
+  "theme": "sleek",
+  "pamConfig": "password.conf",
+  "timeout": 30,
+  "showDate": true,
+  "showHint": true,
+  "clock24h": true
+}

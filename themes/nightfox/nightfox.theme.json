@@ -1,0 +1,20 @@
+{
+  "_comment": "Nightfox theme for quicklock",
+  "bg": "#192330",
+  "fg": "#cdcecf",
+  "error": "#c94f6d",
+  "selection": "#719cd6",
+  "fontFamily": "monospace",
+  "textPrimary": "#e4cfff",
+  "textStatus": "#f4a261",
+  "textSecondary": "#63cdcf",
+  "textMuted": "#81b29a",
+  "textHint": "#d67ad2",
+  "textDisabled": "#738091",
+  "textTertiary": "#39506d",
+  "surfaceBg": "#212e3f",
+  "surfaceButton": "#39506d",
+  "surfaceDisabled": "#212e3f",
+  "spinnerStroke": "#d67ad2",
+  "wallpaper": "themes/nightfox/wallpaper.jpg"
+}

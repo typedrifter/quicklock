@@ -1,0 +1,20 @@
+{
+  "_comment": "Catppuccin Mocha theme for quicklock",
+  "bg": "#1e1e2e",
+  "fg": "#cdd6f4",
+  "error": "#f38ba8",
+  "selection": "#cba6f7",
+  "fontFamily": "monospace",
+  "textPrimary": "#f5c2e7",
+  "textStatus": "#fab387",
+  "textSecondary": "#89b4fa",
+  "textMuted": "#94e2d5",
+  "textHint": "#a6e3a1",
+  "textDisabled": "#6c7086",
+  "textTertiary": "#45475a",
+  "surfaceBg": "#313244",
+  "surfaceButton": "#45475a",
+  "surfaceDisabled": "#313244",
+  "spinnerStroke": "#cba6f7",
+  "wallpaper": "themes/catppuccin/wallpaper.jpg"
+}

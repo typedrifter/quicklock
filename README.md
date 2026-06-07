@@ -39,7 +39,62 @@ Consider this alpha software. There may be bugs, and it has not been thoroughly 
 
 PAM config lives in the `pam/` directory. The default config uses `password.conf`. Adjust to your system as needed.
 
-Replace `background.jpg` with your own wallpaper if you like.
+## Themes
+
+Themes live in the `themes/` directory. Each theme has its own folder containing a `<name>.theme.json` file and a `wallpaper.jpg`.
+
+The active theme is selected in `config.json` at the project root:
+
+```json
+{
+  "theme": "sleek",
+  "pamConfig": "password.conf",
+  "timeout": 30,
+  "showDate": true,
+  "showHint": true,
+  "clock24h": true
+}
+```
+
+All fields are optional and fall back to sensible defaults if omitted.
+
+| Field | Default | Description |
+|---|---|---|
+| `theme` | `sleek` | Theme name (must match a folder in `themes/`) |
+| `pamConfig` | `password.conf` | PAM configuration file. Relative paths are resolved inside the `pam/` directory; absolute paths (e.g. `/etc/pam.d/system-auth`) are used as-is. |
+| `timeout` | `30` | Seconds before cancelling an authentication attempt |
+| `showDate` | `true` | Show the date label above the clock |
+| `showHint` | `true` | Show the "Click or press any key to unlock" hint |
+| `clock24h` | `true` | Use 24-hour clock format (set to `false` for 12-hour) |
+
+Available themes:
+- `sleek` — default dark minimal theme
+- `catppuccin` — soft pastel Catppuccin Mocha palette
+- `tokyonight` — dark neon Tokyo Night palette
+- `nightfox` — deep blue-gray Nightfox palette
+
+If the configured theme is missing or broken, the lockscreen falls back to the built-in `sleek` defaults.
+
+### Creating a custom theme
+
+Copy an existing theme folder, rename it, and adjust the colors in the `.theme.json` file. Only visual tokens need to be defined — layout, sizing, and animation defaults are handled automatically:
+
+```json
+{
+  "bg": "#1e1e2e",
+  "fg": "#cdd6f4",
+  "error": "#f38ba8",
+  "fontFamily": "monospace",
+  "textPrimary": "#f5c2e7",
+  "textSecondary": "#89b4fa",
+  "textMuted": "#94e2d5",
+  "surfaceBg": "#313244",
+  "spinnerStroke": "#cba6f7",
+  "wallpaper": "themes/mytheme/wallpaper.jpg"
+}
+```
+
+Advanced users can still override any layout or animation property by adding it to the theme JSON (the keys match the QML properties in `Config.qml`).
 
 ## Development
 

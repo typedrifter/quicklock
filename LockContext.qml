@@ -7,6 +7,8 @@ Scope {
 	signal unlocked()
 	signal failed()
 
+	Config { id: appConfig }
+
 	property string currentText: ""
 	property bool unlockInProgress: false
 	property bool showFailure: false
@@ -64,7 +66,7 @@ Scope {
 
 	Timer {
 		id: timeoutTimer
-		interval: 30000
+		interval: appConfig.timeout * 1000
 		repeat: false
 		onTriggered: cancelPam()
 	}
@@ -72,8 +74,13 @@ Scope {
 	PamContext {
 		id: pam
 
-		configDirectory: "pam"
-		config: "password.conf"
+		// Support both relative (to pam/) and absolute paths for the PAM config.
+		property string rawConfig: appConfig.pamConfig || "password.conf"
+		property bool rawIsAbsolute: rawConfig.charAt(0) === '/'
+		property int rawLastSlash: rawIsAbsolute ? rawConfig.lastIndexOf('/') : -1
+
+		configDirectory: rawIsAbsolute ? rawConfig.substring(0, rawLastSlash) : "pam"
+		config: rawIsAbsolute ? rawConfig.substring(rawLastSlash + 1) : rawConfig
 
 		onPamMessage: {
 			if (this.responseRequired) {
