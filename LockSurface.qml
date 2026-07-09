@@ -16,7 +16,7 @@ Rectangle {
         anchors.fill: parent
         fillMode: VideoOutput.PreserveAspectCrop
         loops: MediaPlayer.Infinite
-        source: Qt.resolvedUrl("video.mp4")
+        source: Qt.resolvedUrl("background.mp4")
         autoPlay: true
     }
 
@@ -60,6 +60,7 @@ Rectangle {
 
     ColumnLayout {
         id: dateTime
+
         anchors {
             horizontalCenter: parent.horizontalCenter
         }
@@ -152,7 +153,7 @@ Rectangle {
             }
 
             Layout.alignment: Qt.AlignHCenter
-            renderType: Text.NativeRendering
+            // renderType: Text.NativeRendering
             font.pointSize: 14
             // horizontalAlignment: Qt.AlignHCenter
             verticalAlignment: Qt.AlignVCenter
